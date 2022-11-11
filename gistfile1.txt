@@ -1,47 +1,39 @@
-Create 3 EC2 instances
-     t2.micro | ubuntu 20.04 | 
+Create 3 EC2 instances on AWS Cloud
+===================================
+t2.micro | ubuntu 20.04 
 
-Update the apt repository on all the nodes:
+Update the apt repository on all the nodes
+===========================================
 sudo apt-get update
 
-1st Server (Controller)
-=======================
+On the 1st Server (Controller)
+==============================
 [Change the hostname: sudo vim /etc/hostname
                       remove the existing hostname and update it to controller
                       sudo init 6 (to get the change affected) Restart the server]
 
 Install Ansible (Python3 is required)
 =====================================
-url: https://docs.ansible.com/ansible/latest/installation_guide/installation_distros.html#installing-ansible-on-ubuntu
       1. sudo apt update
       2. sudo apt install software-properties-common
       3. sudo add-apt-repository --yes --update ppa:ansible/ansible
       4. sudo apt install ansible
+List of above commands available at: 
+https://docs.ansible.com/ansible/latest/installation_guide/installation_distros.html#installing-ansible-on-ubuntu
+
       
 To check ansible is installed
-      5. ansible --version
+==============================
+ansible --version
 
 Create SSH Keys:
 ================
-ssh-keygen (Hit enter key thrice)
-    id_rsa and id_rsa.pub (generated in .ssh directory within ~)
-ssh-copy-id ubuntu@privateipofmanagednodes  (initially it fails: Permission Denied) Add PasswordAuthentication on managed nodes and retry
-
-Add managed nodes ipaddresses to ansible default inventory file:
-================================================================
-sudo vim /etc/ansible/hosts
-Add the private ipaddresses of the managed nodes in the file and save it.
-
-
-To confirm your targets:
-========================
-ansible all -m ping
+ssh-keygen (Hit enter key thrice)   
 
 
 
-
-Managed Nodes
-==============
+Other Servers - Managed Nodes
+=============================
 [Change the hostname: sudo vim /etc/hostname
                       remove the existing hostname and update it to managednode1 and managednode2
                       sudo init 6 (to get the change affected) Restart the server]
@@ -61,7 +53,25 @@ Connect to MN2:
          Save the file :wq
          sudo service ssh restart
          
-Copy the ssh key info from controller to managed nodes**
+
+On the 1st Server (Controller)
+==============================
+Copy the ssh keys of controller to managed nodes
+
+ssh-copy-id ubuntu@<privateipofmn1>
+ssh-copy-id ubuntu@<privateipofmn2>
+
+
+Add inventory 
+==============
+sudo vim /etc/ansible/hosts
+add private ip addresses of managed nodes in the file
+
+
+Check the inventory - Servers are reachable?:
+=============================================
+ansible all -m ping
+
 
                       
                       
